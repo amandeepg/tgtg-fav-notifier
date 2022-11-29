@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+plyer = "*"
+tgtg = "*"
+dbus-python = "*"
+argparse = "*"
+configparser = "*"
+typing = "*"
+pyyaml = "*"
+
+[dev-packages]
+black = "*"
+isort = "*"
+flake8 = "*"
+mypy = "*"
+types-pyyaml = "*"
+
+[requires]
+python_version = "3.10"
