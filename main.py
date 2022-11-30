@@ -2,6 +2,7 @@ import argparse
 import configparser
 import os
 import pprint
+import subprocess
 from argparse import ArgumentParser
 from configparser import ConfigParser
 from typing import Any
@@ -17,8 +18,10 @@ parser.add_argument("--login", action="store")
 
 args = parser.parse_args()
 config: ConfigParser = configparser.ConfigParser()
-config_file_name: str = f'{os.path.expanduser("~")}/.tgtg-fav-notifier.ini'
-prev_items_file_name: str = f'{os.path.expanduser("~")}/.tgtg-fav-notifier-items'
+home_dir: str = os.path.expanduser("~")
+config_file_name: str = f"{home_dir}/.tgtg-fav-notifier.ini"
+prev_items_file_name: str = f"{home_dir}/.tgtg-fav-notifier-items"
+optional_command = f"{home_dir}/.tgtg-fav-notifier-hook.sh"
 
 CONFIG_FILE_SECTION: str = "DEFAULT"
 pp = pprint.PrettyPrinter(indent=4)
@@ -47,8 +50,10 @@ else:
         map(lambda item: (item["display_name"]), available_items)
     )
 
-    with open(prev_items_file_name) as file:
-        prev_available_items_names = yaml.full_load(file)
+    prev_available_items_names = None
+    if os.path.exists(prev_items_file_name):
+        with open(prev_items_file_name) as file:
+            prev_available_items_names = yaml.full_load(file)
 
     with open(prev_items_file_name, "w") as file:
         yaml.dump(available_items_names, file)
@@ -59,10 +64,18 @@ else:
     pp.pprint(prev_available_items_names)
 
     for available_items_name in available_items_names:
-        if available_items_name not in prev_available_items_names:
+        if (
+            prev_available_items_names is None
+            or available_items_name not in prev_available_items_names
+        ):
             notification.notify(
                 title="TGTG Fav Notifier",
                 message=f"{available_items_name} has food available now",
                 app_icon="",
                 timeout=10,
+            )
+
+            subprocess.call(
+                f'{optional_command} "TGTG Fav Notifier" "{available_items_name} has food available now"',
+                shell=True,
             )
