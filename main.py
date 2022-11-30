@@ -10,6 +10,11 @@ from typing import Any
 import yaml
 from plyer import notification
 from tgtg import TgtgClient
+from sys import platform
+
+if platform == "linux" or platform == "linux2":
+    if os.getenv('XDG_RUNTIME_DIR') is None:
+        os.environ['XDG_RUNTIME_DIR'] = f'/run/user/{subprocess.check_output("id -u", shell=True).strip().decode("utf-8")}'
 
 parser: ArgumentParser = argparse.ArgumentParser(
     description="Too Good To Go Favorites Notifier."
