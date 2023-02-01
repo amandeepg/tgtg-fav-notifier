@@ -19,7 +19,7 @@ $ cd tgtg-fav-notifier
 
 #### Before setting up alerts, you must login:
 ```bash
-$ pipenv run python main.py --login
+$ pipenv run python main.py --login <your-tgtg-email@domain.com>
 ```
 
 #### Then you can add the script to run periodically via cron:
