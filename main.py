@@ -39,6 +39,7 @@ if args.login:
         "access_token": credentials["access_token"],
         "refresh_token": credentials["refresh_token"],
         "user_id": credentials["user_id"],
+        "cookie": credentials["cookie"],
     }
     with open(config_file_name, "w") as configfile:
         config.write(configfile)
@@ -49,6 +50,7 @@ else:
         access_token=config[CONFIG_FILE_SECTION]["access_token"],
         refresh_token=config[CONFIG_FILE_SECTION]["refresh_token"],
         user_id=config[CONFIG_FILE_SECTION]["user_id"],
+        cookie=config[CONFIG_FILE_SECTION]["cookie"],
     )
     items = client.get_items()
     available_items = filter(lambda item: (item["items_available"] > 0), items)
